@@ -1,0 +1,31 @@
+name: Sample Deployment
+
+# This is where you declare all the private keys
+# that are going to be used in the deployment.
+# This private key is the default private key from anvil, don't use this in prod.
+accounts:
+  deployer: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+
+# Declare variables that will be used inside tasks
+variables:
+  foo: 1
+  bar: 2
+  new-owner: "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045"
+  rpc-url: "http://127.0.0.1:8545"
+
+tasks:
+  - forge_create:
+      id: "testId"
+      create-contract: "Test"
+      rpc-url: "{variables[rpc-url]}"
+      private-key: "{accounts[deployer]}"
+      constructor-args:
+        - "{variables[foo]}"
+        - "{variables[bar]}"
+  - cast_send:
+      send-target: "{deployments[testId].address}"
+      send-signature: "transferOwnership(address,string)"
+      send-arguments:
+        - "{variables[new-owner]}"
+        - "Because reasons."
+      private-key: "{accounts[deployer]}"

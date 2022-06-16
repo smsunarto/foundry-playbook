@@ -1,0 +1,4 @@
+cache/
+out/
+.vscode/*.log
+flattened.txt
